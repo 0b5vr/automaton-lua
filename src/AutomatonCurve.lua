@@ -29,18 +29,25 @@ end
 AutomatonCurve.precalc = function( self )
   local resolution = self.__automaton:getResolution()
 
+  local nodeTail = self.__nodes[ 1 ]
+  local iTail = 1
   for iNode = 1, ( table.getn( self.__nodes ) - 1 ) do
-    local node0 = self.__nodes[ iNode ]
-    local node1 = self.__nodes[ iNode + 1 ]
-    local i0 = 1 + math.floor( node0.time * resolution )
-    local i1 = 1 + math.floor( node1.time * resolution )
+    local node0 = nodeTail
+    nodeTail = self.__nodes[ iNode + 1 ]
+    local i0 = iTail
+    local iTail = 1 + math.floor( nodeTail.time * resolution )
 
     self.__values[ i0 ] = node0.value
-    for i = ( i0 + 1 ), ( i1 + 1 ) do
+    for i = ( i0 + 1 ), iTail do
       local time = ( i - 1 ) / resolution
-      local value = automatonBezierEasing( node0, node1, time )
+      local value = automatonBezierEasing( node0, nodeTail, time )
       self.__values[ i ] = value
     end
+  end
+
+  local valuesLength = math.ceil( resolution * nodeTail.time ) + 2
+  for i = ( iTail + 1 ), valuesLength do
+    this.__values[ i ] = nodeTail.value
   end
 
   for iFx, fx in ipairs( self.__fxs ) do
