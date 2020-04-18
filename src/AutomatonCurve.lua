@@ -35,7 +35,7 @@ AutomatonCurve.precalc = function( self )
     local node0 = nodeTail
     nodeTail = self.__nodes[ iNode + 1 ]
     local i0 = iTail
-    local iTail = 1 + math.floor( nodeTail.time * resolution )
+    iTail = 1 + math.floor( nodeTail.time * resolution )
 
     self.__values[ i0 ] = node0.value
     for i = ( i0 + 1 ), iTail do
