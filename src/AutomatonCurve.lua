@@ -47,7 +47,7 @@ AutomatonCurve.precalc = function( self )
 
   local valuesLength = math.ceil( resolution * nodeTail.time ) + 2
   for i = ( iTail + 1 ), valuesLength do
-    this.__values[ i ] = nodeTail.value
+    self.__values[ i ] = nodeTail.value
   end
 
   for iFx, fx in ipairs( self.__fxs ) do
