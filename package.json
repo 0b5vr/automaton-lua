@@ -1,0 +1,14 @@
+{
+  "version": "3.0.0",
+  "description": "Automaton binding for Lua",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node build.js"
+  },
+  "author": "FMS-Cat",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "gaze": "^1.1.3"
+  }
+}
