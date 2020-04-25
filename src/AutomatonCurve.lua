@@ -20,8 +20,28 @@ AutomatonCurve.getLength = function( self )
 end
 
 AutomatonCurve.deserialize = function( self, data )
-  self.__nodes = data.nodes
-  self.__fxs = data.fxs or {}
+  self.__nodes = {}
+  for _, node in ipairs( data.nodes ) do
+    table.insert( self.__nodes, {
+      time = node.time or 0.0,
+      value = node.value or 0.0,
+      [ 'in' ] = node[ 'in' ] or { time = 0.0, value = 0.0 },
+      out = node.out or { time = 0.0, value = 0.0 }
+    } )
+  end
+
+  self.__fxs = {}
+  for _, fx in ipairs( data.fxs ) do
+    if not fx.bypass then
+      table.insert( self.__fxs, {
+        time = fx.time or 0.0,
+        length = fx.length or 0.0,
+        row = fx.row or 0,
+        def = fx.def,
+        params = fx.params
+      } )
+    end
+  end
 
   self:precalc()
 end
