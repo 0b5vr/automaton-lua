@@ -7,6 +7,10 @@
 
   local __cache = {}
 
+  local clamp = function( t, min, max )
+    return math.min( math.max( x, min ), max )
+  end
+
   local A = function( cps )
     return cps.p3 - 3.0 * cps.p2 + 3.0 * cps.p1 - cps.p0
   end
@@ -54,6 +58,9 @@
   local rawBezierEasing = function( cpsx, cpsy, x )
     if x <= cpsx.p0 then return cpsy.p0 end -- clamped
     if x >= cpsx.p3 then return cpsy.p3 end -- clamped
+
+    cpsx.p1 = clamp( cpsx.p1, cpsx.p0, cpsx.p3 )
+    cpsx.p2 = clamp( cpsx.p2, cpsx.p0, cpsx.p3 )
 
     for i = 1, TABLE_SIZE do
       __cache[ i ] = cubicBezier( ( i - 1 ) / ( TABLE_SIZE - 1 ), cpsx )
