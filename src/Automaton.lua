@@ -5,7 +5,6 @@ Automaton.new = function( data )
 
   automaton.__time = 0.0
   automaton.__version = @version
-  automaton.__length = 1.0
   automaton.__resolution = 1000
   automaton.__curves = {}
   automaton.__channels = {}
@@ -26,10 +25,6 @@ end
 
 Automaton.getVersion = function( self )
   return self.__version
-end
-
-Automaton.getLength = function( self )
-  return self.__length
 end
 
 Automaton.getResolution = function( self )
@@ -78,7 +73,7 @@ Automaton.reset = function( self )
 end
 
 Automaton.update = function( self, time )
-  local t = automatonClamp( time, 0.0, self.__length )
+  local t = math.max( time, 0.0 )
 
   -- cache the time
   self.__time = t
