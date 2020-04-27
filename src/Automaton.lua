@@ -46,8 +46,10 @@ Automaton.deserialize = function( self, data )
   end
 end
 
-Automaton.addFxDefinition = function( self, id, fxDef )
-  self.__fxDefinitions[ id ] = fxDef
+Automaton.addFxDefinitions = function( self, fxDefinitions )
+  for id, fxDef in pairs( fxDefinitions ) do
+    self.__fxDefinitions[ id ] = fxDef
+  end
 
   self:precalcAll()
 end
