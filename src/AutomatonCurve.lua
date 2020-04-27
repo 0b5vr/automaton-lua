@@ -73,43 +73,45 @@ AutomatonCurve.precalc = function( self )
   for iFx, fx in ipairs( self.__fxs ) do
     local fxDef = self.__automaton:getFxDefinition( fx.def )
     if fxDef then
+      local availableEnd = math.min( self:getLength(), fx.time + fx.length )
       local i0 = math.ceil( resolution * fx.time )
-      local i1 = math.floor( resolution * ( fx.time + fx.length ) )
+      local i1 = math.floor( resolution * availableEnd )
+      if i0 < i1 then
+        local tempValues = {}
+        local tempLength = i1 - i0
 
-      local tempValues = {}
-      local tempLength = i1 - i0
+        local context = {
+          index = i0,
+          i0 = i0,
+          i1 = i1,
+          time = fx.time,
+          t0 = fx.time,
+          t1 = fx.time + fx.length,
+          deltaTime = 1.0 / resolution,
+          value = 0.0,
+          progress = 0.0,
+          resolution = resolution,
+          length = fx.length,
+          params = fx.params,
+          array = self.__values,
+          getValue = function( time ) return self:getValue( time ) end,
+          init = true,
+          state = {}
+        }
 
-      local context = {
-        index = i0,
-        i0 = i0,
-        i1 = i1,
-        time = fx.time,
-        t0 = fx.time,
-        t1 = fx.time + fx.length,
-        deltaTime = 1.0 / resolution,
-        value = 0.0,
-        progress = 0.0,
-        resolution = resolution,
-        length = fx.length,
-        params = fx.params,
-        array = self.__values,
-        getValue = function( time ) return self:getValue( time ) end,
-        init = true,
-        state = {}
-      }
+        for i = 1, tempLength do
+          context.index = ( i - 1 ) + i0
+          context.time = context.index / resolution
+          context.value = self.__values[ context.index ]
+          context.progress = ( context.time - fx.time ) / fx.length
+          tempValues[ i ] = fxDef.func( context )
 
-      for i = 1, tempLength do
-        context.index = ( i - 1 ) + i0
-        context.time = context.index / resolution
-        context.value = self.__values[ context.index ]
-        context.progress = ( context.time - fx.time ) / fx.length
-        tempValues[ i ] = fxDef.func( context )
+          context.init = false
+        end
 
-        context.init = false
-      end
-
-      for i = 1, tempLength do
-        self.__values[ ( i - 1 ) + i0 ] = tempValues[ i ]
+        for i = 1, tempLength do
+          self.__values[ ( i - 1 ) + i0 ] = tempValues[ i ]
+        end
       end
     end
   end
