@@ -8,7 +8,7 @@
   local __cache = {}
 
   local clamp = function( t, min, max )
-    return math.min( math.max( x, min ), max )
+    return math.min( math.max( t, min ), max )
   end
 
   local A = function( cps )
