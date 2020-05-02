@@ -69,17 +69,19 @@ AutomatonChannel.update = function( self, time )
   local prevTime = self.__time
 
   for iItem, item in ipairs( self.__items ) do
-    local itemTime = time - item.time
+    local begin = item.time
+    local length = item.length
+    local elapsed = time - begin
 
-    if itemTime < 0.0 then
+    if elapsed < 0.0 then
       break
     else
       local progress = 0.0
       local init = false
       local uninit = false
 
-      if item.length <= itemTime then
-        itemTime = item.length
+      if length <= elapsed then
+        elapsed = length
         progress = 1.0
         uninit = true
 
@@ -87,20 +89,24 @@ AutomatonChannel.update = function( self, time )
           self.__head = self.__head + 1
         end
       else
-        progress = item.length ~= 0.0
-          and ( itemTime / item.length )
+        progress = length ~= 0.0
+          and ( elapsed / length )
           or 1.0
       end
 
-      if prevTime < item.time then
+      if prevTime < begin then
         init = true
       end
 
-      value = item:getValue( itemTime )
+      value = item:getValue( elapsed )
 
       for _, listener in ipairs( self.__listeners ) do
         listener( {
-          time = itemTime,
+          time = time,
+          elapsed = elapsed,
+          begin = begin,
+          [ 'end' ] = begin + length,
+          length = length,
           value = value,
           progress = progress,
           init = init,
