@@ -78,7 +78,7 @@ AutomatonCurve.precalc = function( self )
       local i1 = math.floor( resolution * availableEnd )
       if i0 < i1 then
         local tempValues = {}
-        local tempLength = i1 - i0
+        local tempLength = i1 - i0 + 1
 
         local context = {
           index = i0,
