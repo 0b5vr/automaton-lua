@@ -31,15 +31,17 @@ AutomatonCurve.deserialize = function( self, data )
   end
 
   self.__fxs = {}
-  for _, fx in ipairs( data.fxs ) do
-    if not fx.bypass then
-      table.insert( self.__fxs, {
-        time = fx.time or 0.0,
-        length = fx.length or 0.0,
-        row = fx.row or 0,
-        def = fx.def,
-        params = fx.params
-      } )
+  if data.fxs then
+    for _, fx in ipairs( data.fxs ) do
+      if not fx.bypass then
+        table.insert( self.__fxs, {
+          time = fx.time or 0.0,
+          length = fx.length or 0.0,
+          row = fx.row or 0,
+          def = fx.def,
+          params = fx.params
+        } )
+      end
     end
   end
 
