@@ -7,7 +7,7 @@ AutomatonChannel.new = function( automaton, data )
   channel.__items = {}
   channel.__value = 0.0
   channel.__time = -1E999 -- -math.huge
-  channel.__head = 0
+  channel.__head = 1
   channel.__listeners = {}
 
   setmetatable( channel, { __index = AutomatonChannel } )
@@ -35,7 +35,7 @@ end
 AutomatonChannel.reset = function( self )
   self.__time = -1E999 -- -math.huge
   self.__value = 0.0
-  self.__head = 0
+  self.__head = 1
 end
 
 AutomatonChannel.subscribe = function( self, listener )
@@ -68,7 +68,8 @@ AutomatonChannel.update = function( self, time )
   local value = self.__value
   local prevTime = self.__time
 
-  for iItem, item in ipairs( self.__items ) do
+  for iItem = self.__head, table.getn( self.__items ) do
+    local item = self.__items[ iItem ]
     local begin = item.time
     local length = item.length
     local elapsed = time - begin
