@@ -19,6 +19,7 @@ AutomatonChannelItem.deserialize = function( self, data )
   self.offset = data.offset or 0.0
   self.speed = data.speed or 1.0
   self.amp = data.amp or 1.0
+  self.reset = data.reset
 
   if data.curve then
     self.curve = self.__automaton:getCurve( data.curve )
@@ -27,6 +28,10 @@ AutomatonChannelItem.deserialize = function( self, data )
 end
 
 AutomatonChannelItem.getValue = function( self, time )
+  if self.reset and self.length <= time then
+    return 0.0
+  end
+
   if self.curve then
     local t = self.offset + time * self.speed
     return self.value + self.amp * self.curve:getValue( t )
