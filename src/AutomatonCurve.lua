@@ -49,6 +49,38 @@ AutomatonCurve.deserialize = function( self, data )
 end
 
 AutomatonCurve.precalc = function( self )
+  self:__generateCurve()
+  self:__applyFxs()
+end
+
+AutomatonCurve.getValue = function( self, time )
+  if time < 0.0 then
+    -- clamp left
+    return self.__values[ 1 ]
+
+  elseif self:getLength() <= time then
+    -- clamp right
+    return self.__values[ table.getn( self.__values ) ]
+
+  else
+    -- fetch two values then do the linear interpolation
+    local resolution = self.__automaton:getResolution()
+    local index = time * resolution
+    local indexi = math.floor( index )
+    local indexf = index - indexi
+    indexi = indexi + 1
+
+    local v0 = self.__values[ indexi ]
+    local v1 = self.__values[ indexi + 1 ]
+
+    local v = v0 + ( v1 - v0 ) * indexf
+
+    return v
+
+  end
+end
+
+AutomatonCurve.__generateCurve = function( self )
   local resolution = self.__automaton:getResolution()
 
   local nodeTail = self.__nodes[ 1 ]
@@ -71,7 +103,9 @@ AutomatonCurve.precalc = function( self )
   for i = ( iTail + 1 ), valuesLength do
     self.__values[ i ] = nodeTail.value
   end
+end
 
+AutomatonCurve.__applyFxs = function( self )
   for iFx, fx in ipairs( self.__fxs ) do
     local fxDef = self.__automaton:getFxDefinition( fx.def )
     if fxDef then
@@ -116,32 +150,5 @@ AutomatonCurve.precalc = function( self )
         end
       end
     end
-  end
-end
-
-AutomatonCurve.getValue = function( self, time )
-  if time < 0.0 then
-    -- clamp left
-    return self.__values[ 1 ]
-
-  elseif self:getLength() <= time then
-    -- clamp right
-    return self.__values[ table.getn( self.__values ) ]
-
-  else
-    -- fetch two values then do the linear interpolation
-    local resolution = self.__automaton:getResolution()
-    local index = time * resolution
-    local indexi = math.floor( index )
-    local indexf = index - indexi
-    indexi = indexi + 1
-
-    local v0 = self.__values[ indexi ]
-    local v1 = self.__values[ indexi + 1 ]
-
-    local v = v0 + ( v1 - v0 ) * indexf
-
-    return v
-
   end
 end
