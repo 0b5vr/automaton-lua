@@ -1,6 +1,6 @@
 Automaton = {}
 
-Automaton.new = function( data )
+Automaton.new = function( data, options )
   local automaton = {}
 
   automaton.__time = 0.0
@@ -14,7 +14,11 @@ Automaton.new = function( data )
 
   automaton.auto = function( name, callback ) return automaton:__auto( name, callback ) end
 
-  automaton:deserialize( data );
+  if options and options.fxDefinitions then
+    automaton:addFxDefinitions( options.fxDefinitions )
+  end
+
+  automaton:deserialize( data )
 
   return automaton
 end
