@@ -126,6 +126,7 @@ AutomatonCurve.__applyFxs = function( self )
           deltaTime = 1.0 / resolution,
           value = 0.0,
           progress = 0.0,
+          elapsed = 0.0,
           resolution = resolution,
           length = fx.length,
           params = fx.params,
@@ -139,7 +140,8 @@ AutomatonCurve.__applyFxs = function( self )
           context.index = ( i - 1 ) + i0
           context.time = context.index / resolution
           context.value = self.__values[ context.index ]
-          context.progress = ( context.time - fx.time ) / fx.length
+          context.elapsed = context.time - fx.time
+          context.progress = context.elapsed / fx.length
           tempValues[ i ] = fxDef.func( context )
 
           context.init = false
