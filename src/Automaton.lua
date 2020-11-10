@@ -52,7 +52,9 @@ end
 
 Automaton.addFxDefinitions = function( self, fxDefinitions )
   for id, fxDef in pairs( fxDefinitions ) do
-    self.__fxDefinitions[ id ] = fxDef
+    if type( fxDef.func ) == 'function' then
+      self.__fxDefinitions[ id ] = fxDef
+    end
   end
 
   self:precalcAll()
