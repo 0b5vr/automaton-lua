@@ -28,7 +28,7 @@ function build( path, debugmode ) {
       const result = re.exec( data );
       if ( !result ) { break; }
 
-      data = data.replace( result[ 0 ], `'${ packageJson.version }'` );
+      data = data.replace( result[ 0 ], packageJson.version );
     }
   }
 

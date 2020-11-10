@@ -4,7 +4,7 @@ Automaton.new = function( data, options )
   local automaton = {}
 
   automaton.__time = 0.0
-  automaton.__version = @version
+  automaton.__version = '@version'
   automaton.__resolution = 1000
   automaton.__curves = {}
   automaton.__channels = {}
