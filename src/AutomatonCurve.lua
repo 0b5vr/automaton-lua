@@ -108,12 +108,14 @@ AutomatonCurve.__generateCurve = function( self )
 end
 
 AutomatonCurve.__applyFxs = function( self )
+  local resolution = self.__automaton:getResolution()
+
   for iFx, fx in ipairs( self.__fxs ) do
     local fxDef = self.__automaton:getFxDefinition( fx.def )
     if fxDef then
       local availableEnd = math.min( self:getLength(), fx.time + fx.length )
-      local i0 = math.ceil( resolution * fx.time )
-      local i1 = math.floor( resolution * availableEnd )
+      local i0 = 1 + math.ceil( resolution * fx.time )
+      local i1 = 1 + math.floor( resolution * availableEnd )
       if i0 < i1 then
         local tempValues = {}
         local tempLength = i1 - i0 + 1
