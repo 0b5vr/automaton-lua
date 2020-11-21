@@ -23,10 +23,12 @@ AutomatonCurve.deserialize = function( self, data )
   self.__nodes = {}
   for _, node in ipairs( data.nodes ) do
     table.insert( self.__nodes, {
-      time = node.time or 0.0,
-      value = node.value or 0.0,
-      [ 'in' ] = node[ 'in' ] or { time = 0.0, value = 0.0 },
-      out = node.out or { time = 0.0, value = 0.0 }
+      time = node[ 1 ] or 0.0,
+      value = node[ 2 ] or 0.0,
+      inTime = node[ 3 ] or 0.0,
+      inValue = node[ 4 ] or 0.0,
+      outTime = node[ 5 ] or 0.0,
+      outValue = node[ 6 ] or 0.0
     } )
   end
 

@@ -27,7 +27,7 @@ end
 
 AutomatonChannel.deserialize = function( self, data )
   self.__items = {}
-  for iItem, item in ipairs( data.items ) do
+  for iItem, item in ipairs( data.items or {} ) do
     self.__items[ iItem ] = AutomatonChannelItem.new( self.__automaton, item )
   end
 end

@@ -89,14 +89,14 @@ do
     return rawBezierEasing(
       {
         p0 = node0.time,
-        p1 = node0.time + ( node0.out and node0.out.time or 0.0 ),
-        p2 = node1.time + ( node1[ 'in' ] and node1[ 'in' ].time or 0.0 ),
+        p1 = node0.time + node0.outTime,
+        p2 = node1.time + node1.inTime,
         p3 = node1.time
       },
       {
         p0 = node0.value,
-        p1 = node0.value + ( node0.out and node0.out.value or 0.0 ),
-        p2 = node1.value + ( node1[ 'in' ] and node1[ 'in' ].value or 0.0 ),
+        p1 = node0.value + node0.outValue,
+        p2 = node1.value + node1.inValue,
         p3 = node1.value
       },
       time
