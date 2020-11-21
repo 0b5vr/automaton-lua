@@ -99,6 +99,7 @@ end
 
 Automaton.__auto = function( self, name, listener )
   local channel = self.mapNameToChannel[ name ]
+  if not channel then return end
 
   if listener then
     channel:subscribe( listener )
