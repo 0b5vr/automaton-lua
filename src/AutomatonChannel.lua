@@ -64,8 +64,9 @@ AutomatonChannel.getValue = function( self, time )
   end
 end
 
-AutomatonChannel.update = function( self, time )
-  local value = self.__value
+AutomatonChannel.consume = function( self, time )
+  local ret = {}
+
   local prevTime = self.__time
 
   for iItem = self.__head, table.getn( self.__items ) do
@@ -99,24 +100,27 @@ AutomatonChannel.update = function( self, time )
         init = true
       end
 
-      value = item:getValue( elapsed )
+      table.insert( ret, { begin + elapsed, function()
+        self.__value = item:getValue( elapsed )
 
-      for _, listener in ipairs( self.__listeners ) do
-        listener( {
-          time = time,
-          elapsed = elapsed,
-          begin = begin,
-          [ 'end' ] = begin + length,
-          length = length,
-          value = value,
-          progress = progress,
-          init = init,
-          uninit = uninit
-        } )
-      end
+        for _, listener in ipairs( self.__listeners ) do
+          listener( {
+            time = time,
+            elapsed = elapsed,
+            begin = begin,
+            [ 'end' ] = begin + length,
+            length = length,
+            value = self.__value,
+            progress = progress,
+            init = init,
+            uninit = uninit
+          } )
+        end
+      end } )
     end
   end
 
   self.__time = time
-  self.__value = value
+
+  return ret
 end

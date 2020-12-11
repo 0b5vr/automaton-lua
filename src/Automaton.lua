@@ -91,9 +91,28 @@ Automaton.update = function( self, time )
   -- cache the time
   self.__time = t
 
-  -- grab the current value for each channels
-  for _, channel in ipairs( self.channels ) do
-    channel:update( self.__time )
+  -- consume channel items
+  local array = {}
+  for chIndex, channel in ipairs( self.channels ) do
+    for _, v in channel:consume( self.__time ) do
+      table.insert( array, { v[ 1 ], v[ 2 ], chIndex } )
+      --                                     ^^^^^^^ because lua table.sort is not stable,,,
+    end
+  end
+
+  -- sort items
+  table.sort( array, function( a, b )
+    if a[ 1 ] ~= b[ 1 ] then
+      return a[ 1 ] < b[ 1 ]
+    else
+      -- because lua table.sort is not stable,,,
+      return a[ 3 ] < b[ 3 ]
+    end
+  end )
+
+  -- execute items
+  for _, item in ipairs( array ) do
+    item[ 2 ]()
   end
 end
 
