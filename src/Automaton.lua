@@ -94,7 +94,7 @@ Automaton.update = function( self, time )
   -- consume channel items
   local array = {}
   for chIndex, channel in ipairs( self.channels ) do
-    for _, v in channel:consume( self.__time ) do
+    for _, v in ipairs( channel:consume( self.__time ) ) do
       table.insert( array, { v[ 1 ], v[ 2 ], chIndex } )
       --                                     ^^^^^^^ because lua table.sort is not stable,,,
     end
