@@ -44,6 +44,12 @@ end
 
 AutomatonChannel.getValue = function( self, time )
   local next = table.getn( self.__items )
+
+  -- no items??? damn
+  if next == 0 then
+    return 0.0
+  end
+
   for iItem, item in ipairs( self.__items ) do
     if time < item.time then
       next = iItem
