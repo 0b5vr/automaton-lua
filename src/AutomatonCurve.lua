@@ -5,6 +5,7 @@ AutomatonCurve.new = function( automaton, data )
 
   curve.__automaton = automaton
   curve.__values = {}
+  curve.__shouldNotInterpolate = {}
   curve.__nodes = {}
   curve.__fxs = {}
 
@@ -75,6 +76,11 @@ AutomatonCurve.getValue = function( self, time )
     local v0 = self.__values[ indexi ]
     local v1 = self.__values[ indexi + 1 ]
 
+    if self.__shouldNotInterpolate[ indexi ] == 1 then
+      local vp = self.__values[ math.max( indexi - 1, 1 ) ]
+      v1 = 2.0 * v0 - vp -- v0 + ( v0 - vp )
+    end
+
     local v = v0 + ( v1 - v0 ) * indexf
 
     return v
@@ -94,10 +100,15 @@ AutomatonCurve.__generateCurve = function( self )
     iTail = 1 + math.floor( nodeTail.time * resolution )
 
     self.__values[ i0 ] = node0.value
-    for i = ( i0 + 1 ), iTail do
-      local time = ( i - 1 ) / resolution
-      local value = automatonBezierEasing( node0, nodeTail, time )
-      self.__values[ i ] = value
+
+    if i0 == iTail and iTail ~= 1 then
+      this.__shouldNotInterpolate[ iTail - 1 ] = 1
+    else
+      for i = ( i0 + 1 ), iTail do
+        local time = ( i - 1 ) / resolution
+        local value = automatonBezierEasing( node0, nodeTail, time )
+        self.__values[ i ] = value
+      end
     end
   end
 
@@ -135,6 +146,7 @@ AutomatonCurve.__applyFxs = function( self )
           length = fx.length,
           params = fx.params,
           array = self.__values,
+          shouldNotInterpolate = self.__shouldNotInterpolate,
           getValue = function( time ) return self:getValue( time ) end,
           init = true,
           state = {}
