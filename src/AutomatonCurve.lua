@@ -146,7 +146,10 @@ AutomatonCurve.__applyFxs = function( self )
           length = fx.length,
           params = fx.params,
           array = self.__values,
-          shouldNotInterpolate = self.__shouldNotInterpolate,
+          shouldNotInterpolate = self.__shouldNotInterpolate[ i0 ] == 1,
+          setShouldNotInterpolate = function( shouldNotInterpolate )
+            this.__shouldNotInterpolate[ context.index ] = shouldNotInterpolate and 1 or 0
+          end,
           getValue = function( time ) return self:getValue( time ) end,
           init = true,
           state = {}
@@ -158,6 +161,7 @@ AutomatonCurve.__applyFxs = function( self )
           context.value = self.__values[ context.index ]
           context.elapsed = context.time - fx.time
           context.progress = context.elapsed / fx.length
+          context.shouldNotInterpolate = self.__shouldNotInterpolate[ ( i - 1 ) + i0 ] == 1
           tempValues[ i ] = fxDef.func( context )
 
           context.init = false
