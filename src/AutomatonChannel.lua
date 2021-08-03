@@ -60,7 +60,7 @@ AutomatonChannel.getValue = function( self, time )
   if item.getEnd() < time then
     return item:getValue( item.length )
   else
-    return item:getvalue( time - item.time )
+    return item:getValue( time - item.time )
   end
 end
 
