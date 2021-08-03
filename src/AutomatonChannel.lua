@@ -50,6 +50,8 @@ AutomatonChannel.getValue = function( self, time )
     return 0.0
   end
 
+  -- this is binarySearch in JS implementation
+  -- See: https://github.com/FMS-Cat/automaton/commit/ca98fceac66e10bea3665ce2d743a0be85f87c82
   for iItem, item in ipairs( self.__items ) do
     if time < item.time then
       next = iItem
