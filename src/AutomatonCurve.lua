@@ -102,7 +102,7 @@ AutomatonCurve.__generateCurve = function( self )
     self.__values[ i0 ] = node0.value
 
     if i0 == iTail and iTail ~= 1 then
-      this.__shouldNotInterpolate[ iTail - 1 ] = 1
+      self.__shouldNotInterpolate[ iTail - 1 ] = 1
     else
       for i = ( i0 + 1 ), iTail do
         local time = ( i - 1 ) / resolution
@@ -148,7 +148,7 @@ AutomatonCurve.__applyFxs = function( self )
           array = self.__values,
           shouldNotInterpolate = self.__shouldNotInterpolate[ i0 ] == 1,
           setShouldNotInterpolate = function( shouldNotInterpolate )
-            this.__shouldNotInterpolate[ context.index ] = shouldNotInterpolate and 1 or 0
+            self.__shouldNotInterpolate[ context.index ] = shouldNotInterpolate and 1 or 0
           end,
           getValue = function( time ) return self:getValue( time ) end,
           init = true,
