@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node build.js"
   },
-  "author": "FMS-Cat",
+  "author": "0b5vr",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
